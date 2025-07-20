@@ -7,7 +7,12 @@ from io import BytesIO
 import numpy as np
 
 # Load your custom YOLOv9 model
-model = YOLO('Model/best.pt')
+model = None
+model_load_error = None
+try:
+    model = YOLO('Model/best.pt')
+except Exception as e:
+    model_load_error = str(e)
 
 # Function for prediction using YOLOv9 model
 def predict(chosen_model, img, classes=[], conf=0.5):
@@ -32,6 +37,11 @@ def predict_and_detect(chosen_model, img, classes=[], conf=0.5):
 
 # Streamlit app title
 st.title("Upload the Image for Detections!!")
+
+# Show warning if model is not loaded
+if model_load_error or model is None:
+    st.warning("Model file not found or failed to load. Please add a YOLO model (Model/best.pt) that detects explicit images.")
+    st.stop()
 
 # Upload image file
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png"])
