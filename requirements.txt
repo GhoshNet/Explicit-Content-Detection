@@ -4,3 +4,4 @@ ultralytics
 streamlit
 numpy
 opencv-python-headless
+altair==4.2.2
