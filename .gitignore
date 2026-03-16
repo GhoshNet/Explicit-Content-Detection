@@ -1,1 +1,12 @@
 .DS_Store
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.env
+backend/__pycache__/
+frontend/node_modules/
+frontend/dist/
+runs/
+explicitDataset.v1i.yolov11
+data_abs.yaml
