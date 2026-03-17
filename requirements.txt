@@ -2,6 +2,16 @@ streamlit>=1.32
 altair==4.2.2
 numpy
 pandas
-torch --index-url https://download.pytorch.org/whl/cpu
 ultralytics==8.2.103
 pillow
+
+# ── Local / GPU installation ───────────────────────────────────────────────────
+# Uncomment the line below when running locally to install PyTorch with GPU
+# support (CUDA). Remove or leave commented for Streamlit Cloud deployment,
+# which uses the CPU-only wheel above.
+#
+# torch --index-url https://download.pytorch.org/whl/cu121
+
+# ── Streamlit Cloud (CPU-only PyTorch) ────────────────────────────────────────
+# The line below is used by Streamlit Cloud. Comment it out for local GPU runs.
+# torch --index-url https://download.pytorch.org/whl/cpu

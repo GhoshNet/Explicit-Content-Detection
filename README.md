@@ -40,8 +40,9 @@ Explicit-Content-Detection/
 ├── train.py                 # YOLOv9 training script
 ├── data_abs.yaml            # Dataset config (absolute paths)
 ├── yolo11m.pt               # Base pretrained weights
+├── packages.txt             # System-level apt packages (Streamlit Cloud)
 ├── start.sh                 # Dev launcher — starts backend + frontend
-└── requirements.txt         # Streamlit app dependencies
+└── requirements.txt         # Python dependencies (Streamlit app)
 ```
 
 ---
@@ -82,12 +83,47 @@ Open `http://localhost:5173` in your browser.
 
 ### Option 2 — Streamlit (Standalone)
 
+#### Local — CPU
+
 ```bash
 pip install -r requirements.txt
 streamlit run streamlit_app.py
 ```
 
-Open the local URL printed in the terminal (default: `http://localhost:8501`).
+#### Local — GPU (CUDA)
+
+`requirements.txt` ships with the CPU-only PyTorch wheel for Streamlit Cloud compatibility. To use your GPU locally, swap the torch line before installing:
+
+1. Open `requirements.txt` and comment out the CPU wheel:
+   ```
+   # torch --index-url https://download.pytorch.org/whl/cpu
+   ```
+2. Uncomment the CUDA wheel:
+   ```
+   torch --index-url https://download.pytorch.org/whl/cu121
+   ```
+3. Install and run:
+   ```bash
+   pip install -r requirements.txt
+   streamlit run streamlit_app.py
+   ```
+
+Open `http://localhost:8501` in your browser.
+
+---
+
+## Streamlit Cloud Deployment
+
+The app deploys to [Streamlit Community Cloud](https://streamlit.io/cloud) directly from this repo.
+
+**`packages.txt`** installs the required system libraries before Python deps:
+
+```
+libgl1          # provides libGL.so.1  (required by opencv-python)
+libglib2.0-0t64 # provides libgthread-2.0.so.0 (Debian trixie package name)
+```
+
+> **Note:** On Debian trixie (used by Streamlit Cloud), the glib package was renamed `libglib2.0-0t64` as part of the 64-bit time_t transition. Using the old `libglib2.0-0` name will fail with a dependency conflict.
 
 ---
 
@@ -176,7 +212,7 @@ Trained weights are automatically copied to `Model/best.pt`.
 | Backend API | FastAPI + Uvicorn |
 | Frontend | React 18 + Vite + TailwindCSS |
 | Standalone UI | Streamlit |
-| Image processing | OpenCV, Pillow |
+| Image processing | Pillow, Ultralytics built-in renderer |
 
 ---
 
