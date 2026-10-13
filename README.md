@@ -173,9 +173,15 @@ The model detects five classes of explicit content:
 
 ## Model Training
 
-The model is a custom-trained **YOLOv9** network, fine-tuned on the [BE Explicit v1 dataset](https://universe.roboflow.com/tanmay-pwudb/be-explicit/dataset/1) from Roboflow.
+The model is a custom-trained **YOLOv9** network, fine-tuned on a privately assembled dataset of about 4,400 source images with bounding-box annotations made for this project. The dataset is not distributed with this repository.
 
-**Dataset splits:**
+**Data provenance:**
+
+- Most of the images (roughly 70–95%, judging by their original filenames) trace back to the NSFW image collection gathered for [GantMan/nsfw_model](https://github.com/GantMan/nsfw_model) with [nsfw_data_scraper](https://github.com/alex000kim/nsfw_data_scraper), most likely obtained through the NudeNet classifier dataset.
+- A small share (about 5%) was collected directly from Reddit.
+- The images were scraped from the public web by third parties. Their original provenance could not be verified.
+
+**Dataset splits** (after 3× augmentation — Gaussian blur and salt-and-pepper noise):
 
 | Split | Images |
 |-------|--------|
@@ -216,6 +222,14 @@ Trained weights are automatically copied to `Model/best.pt`.
 
 ---
 
+## Limitations
+
+- The model was trained on unaudited, web-scraped data (see [Data provenance](#model-training)), so its biases and failure modes are not well characterised.
+- It has not been validated for production content moderation and should not be the sole basis for any moderation decision.
+- It detects five specific classes only; an image with no detections is not guaranteed to be safe.
+
+---
+
 ## License
 
-This project is for educational and research purposes. The dataset is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Review all dependency and model licenses before deploying to production.
+This project is for educational and research purposes. The training images are third-party content and are not licensed or redistributed by this project. Review all dependency and model licenses before deploying to production.
